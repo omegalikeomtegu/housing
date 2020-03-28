@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-title" content="CodePen">
+<title>Housing System</title>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css'>
+<style>
+body,html{
+  background:#33333A;
+}
+
+#table{
+  margin-top:10px;
+}
+
+#table td,th{
+  border-collapse:collapse;
+  border:2px solid black;
+  width:19%;
+  background:#333334
+}
+
+th{
+  text-align:center;
+}
+
+td{
+}
+
+div{
+  color:#DDDDDD;
+}
+</style>
+</head>
+<body translate="no">
+<div class='container'>
+<h6>developed by Farkler_</h6>
+<h2>Player Tokens</h2>
+<input placeholder='Player Name' id='name' />
+<input type='number' placeholder='Number Of Tokens' id='tokens' />
+<button id='add'>Update Tokens</button>
+
+<button id='clear'>Clear Data</button>
+<table id=table>
+<tr>
+<th>Player Name</th>
+<th>Tokens</th>
+</tr>
+</table>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script id="rendered-js">
+console.clear();
+
+let name = "";
+let tokens = 0;
+let data = {};
+let players = [];
+
+$("#name").on("change", function (e) {
+  name = document.getElementById("name").value;
+  console.log(name);
+});
+
+$("#tokens").on("change", function (e) {
+  tokens = parseInt(document.getElementById("tokens").value);
+  if(tokens === 'undefined'){
+    tokens = 0
+  }
+  console.log(tokens);
+});
+
+function createList () {
+  for(let i = 0; i < localStorage.length; i++){
+    name = localStorage.key(i);
+    // console.log(localStorage,'localstorage')
+    tokens = localStorage.getItem(name);
+    addPlayer()
+  }
+}
+createList()
+
+
+function addPlayer() {
+  data[name] = tokens;
+  localStorage.setItem(name, data[name]);
+  
+  if (players.indexOf(name) == -1) { //if the person isnt on the list yet
+    players.push(name);
+
+    let table = $("#table");
+    table.append(
+      "<tr><td>" +
+        name +
+        "</td><td id=" + name + ">" +
+        data[name] +
+        "</td></tr>"
+    );
+  } else {
+    console.log(localStorage)
+    document.getElementById(name).innerHTML = localStorage.getItem(name);
+  }
+}
+
+$("#add").on("click", function(e){
+  if (name != "") {
+    addPlayer()
+  }
+});
+
+
+$('#clear').on('click', function(e){
+  localStorage.clear();
+})
+
+// function removePlayer(username){
+//    alert("This function isn't available yet.")
+// }
+
+// $('#remove').on('click', removePlayer('test'))
+    </script>
+</body>
+</html>
