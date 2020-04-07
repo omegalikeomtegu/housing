@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="apple-mobile-web-app-title" content="CodePen">
-<title>Housing System</title>
+<title>Housing Website</title>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css'>
 <style>
 body,html{
@@ -32,23 +32,35 @@ td{
 div{
   color:#DDDDDD;
 }
+
+.container {
+  background: #44444F;
+  padding-bottom:4%;
+  border-radius: 10px;
+  margin-top:10px;
+}
 </style>
 </head>
 <body translate="no">
 <div class='container'>
 <h6>developed by Farkler_</h6>
-<h2>Player Tokens</h2>
-<input placeholder='Player Name' id='name' />
+<p>This is designed to help players manage their house. It currently has currency, items, and an egg hunt leaderboard.</p>
+<h2>Player Inventory</h2>
+<input placeholder='Player Name' id='name' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 <input type='number' placeholder='Number Of Tokens' id='tokens' />
 <button id='add'>Update Tokens</button>
-
+<input id='itemsInput' placeholder='Items Owned'>
+<button id='items'>Update Items</button>
 <button id='clear'>Clear Data</button>
 <table id=table>
 <tr>
 <th>Player Name</th>
 <th>Tokens</th>
+<th>Items Owned</th>
 </tr>
 </table>
+<br /><br />
+<h2>Egg Hunt Leaderboard</h2>
 </div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
 <script id="rendered-js">
@@ -56,6 +68,7 @@ console.clear();
 
 let name = "";
 let tokens = 0;
+let item = '';
 let data = {};
 let players = [];
 
@@ -72,11 +85,19 @@ $("#tokens").on("change", function (e) {
   console.log(tokens);
 });
 
+$('#itemsInput').on('change', function (e) {
+  item = document.getElementById('itemsInput').value;
+  if(item === 'undefined') {
+     item = ''
+  }
+});
+
 function createList () {
   for(let i = 0; i < localStorage.length; i++){
     name = localStorage.key(i);
     // console.log(localStorage,'localstorage')
-    tokens = localStorage.getItem(name);
+    tokens = localStorage.getItem(name[0]);
+    items = localStorage.getItem(name[1])
     addPlayer()
   }
 }
@@ -85,7 +106,7 @@ createList()
 
 function addPlayer() {
   data[name] = tokens;
-  localStorage.setItem(name, data[name]);
+  localStorage.setItem(name, [data[name], item]);
   
   if (players.indexOf(name) == -1) { //if the person isnt on the list yet
     players.push(name);
@@ -96,11 +117,13 @@ function addPlayer() {
         name +
         "</td><td id=" + name + ">" +
         data[name] +
+        "</td><td>" + 
+        item + 
         "</td></tr>"
     );
   } else {
     console.log(localStorage)
-    document.getElementById(name).innerHTML = localStorage.getItem(name);
+    document.getElementById(name).innerHTML = localStorage.getItem(name[0]);
   }
 }
 
@@ -110,6 +133,7 @@ $("#add").on("click", function(e){
   }
 });
 
+$('#items').on('click')
 
 $('#clear').on('click', function(e){
   localStorage.clear();
@@ -123,3 +147,4 @@ $('#clear').on('click', function(e){
     </script>
 </body>
 </html>
+
